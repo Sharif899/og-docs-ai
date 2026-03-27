@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ask OG Docs — OpenGradient Documentation AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07090c;--surface:#0b0e12;--card:#0f1318;
+  --border:#181e26;--border2:#222c38;
+  --text:#dce6f0;--muted:#3d5268;--dim:#141c24;
+  --og:#00c2ff;--og-dim:#00090f;--og-mid:#0085b0;
+  --green:#10b981;--green-dim:#031a10;
+  --amber:#f59e0b;--amber-dim:#150f00;
+  --mono:'Fira Code',monospace;--sans:'Plus Jakarta Sans',sans-serif;
+}
+html,body{height:100%;overflow:hidden}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);display:flex;flex-direction:column;-webkit-font-smoothing:antialiased}
+
+/* ── Top bar ── */
+header{
+  height:56px;flex-shrink:0;
+  background:var(--surface);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;padding:0 20px;
+  justify-content:space-between;
+}
+.header-left{display:flex;align-items:center;gap:12px}
+.og-logo{
+  width:32px;height:32px;border-radius:8px;
+  background:linear-gradient(135deg,var(--og),var(--og-mid));
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:11px;font-weight:500;color:#000;
+}
+.header-title{font-size:15px;font-weight:700;letter-spacing:-.3px}
+.header-badge{
+  font-family:var(--mono);font-size:9px;letter-spacing:1.5px;
+  text-transform:uppercase;color:var(--og);
+  background:var(--og-dim);border:1px solid rgba(0,194,255,.2);
+  padding:3px 8px;border-radius:3px;
+}
+.header-right{display:flex;align-items:center;gap:10px}
+.tee-status{
+  display:flex;align-items:center;gap:5px;
+  font-family:var(--mono);font-size:9px;color:var(--green);
+  letter-spacing:.5px;
+}
+.tee-dot{
+  width:5px;height:5px;border-radius:50%;
+  background:var(--green);box-shadow:0 0 5px var(--green);
+  animation:glow 2s infinite;
+}
+@keyframes glow{0%,100%{opacity:1}50%{opacity:.4}}
+.hlink{
+  font-family:var(--mono);font-size:9px;color:var(--muted);
+  text-decoration:none;letter-spacing:.5px;transition:color .15s;
+}
+.hlink:hover{color:var(--text)}
+
+/* ── Body layout ── */
+.body-wrap{flex:1;display:flex;overflow:hidden}
+
+/* ── Sidebar ── */
+.sidebar{
+  width:220px;flex-shrink:0;
+  background:var(--surface);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+@media(max-width:700px){.sidebar{display:none}}
+.sb-section{padding:14px 14px 10px;border-bottom:1px solid var(--border)}
+.sb-label{
+  font-family:var(--mono);font-size:8px;letter-spacing:2px;
+  text-transform:uppercase;color:var(--muted);margin-bottom:10px;
+}
+.topic-btn{
+  width:100%;text-align:left;padding:7px 10px;
+  font-family:var(--sans);font-size:12px;color:var(--muted);
+  background:transparent;border:1px solid transparent;
+  border-radius:5px;cursor:pointer;transition:all .12s;
+  display:flex;align-items:center;gap:8px;margin-bottom:2px;
+}
+.topic-btn:hover{background:var(--dim);color:var(--text);border-color:var(--border)}
+.topic-icon{font-size:13px;flex-shrink:0}
+.sb-links{padding:12px 14px;flex:1}
+.sb-link{
+  display:flex;align-items:center;gap:6px;padding:5px 0;
+  font-family:var(--mono);font-size:10px;color:var(--muted);
+  text-decoration:none;transition:color .12s;letter-spacing:.3px;
+  border-bottom:1px solid var(--border);
+}
+.sb-link:last-child{border-bottom:none}
+.sb-link:hover{color:var(--og)}
+.sb-link-dot{width:4px;height:4px;border-radius:50%;background:var(--border2);flex-shrink:0}
+
+/* ── Chat ── */
+.chat-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden}
+
+/* ── Messages ── */
+.msgs{
+  flex:1;overflow-y:auto;padding:20px;
+  display:flex;flex-direction:column;gap:0;
+}
+.msgs::-webkit-scrollbar{width:3px}
+.msgs::-webkit-scrollbar-thumb{background:var(--border2)}
+
+/* Welcome state */
+.welcome{
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;padding:40px 20px;text-align:center;
+  flex:1;gap:0;
+}
+.welcome-logo{
+  width:64px;height:64px;border-radius:16px;
+  background:linear-gradient(135deg,var(--og),var(--og-mid));
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:22px;font-weight:500;color:#000;
+  margin-bottom:20px;
+  box-shadow:0 0 40px rgba(0,194,255,.15);
+}
+.welcome-title{font-size:24px;font-weight:700;letter-spacing:-.5px;margin-bottom:8px}
+.welcome-sub{font-size:14px;color:var(--muted);max-width:400px;line-height:1.65;margin-bottom:32px}
+.qs-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:500px;width:100%}
+@media(max-width:500px){.qs-grid{grid-template-columns:1fr}}
+.q-card{
+  padding:12px 14px;background:var(--card);
+  border:1px solid var(--border);border-radius:8px;
+  font-size:12px;color:var(--text);text-align:left;
+  cursor:pointer;transition:border-color .15s,background .15s;
+  line-height:1.45;
+}
+.q-card:hover{border-color:var(--og);background:var(--og-dim)}
+.q-tag{
+  font-family:var(--mono);font-size:8px;color:var(--og);
+  letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;
+}
+
+/* Message bubbles */
+.msg-group{margin-bottom:20px}
+.msg{display:flex;gap:10px;margin-bottom:4px}
+.msg.user{flex-direction:row-reverse}
+.avatar{
+  width:26px;height:26px;border-radius:6px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:9px;font-weight:500;
+}
+.avatar.user{background:rgba(0,194,255,.15);color:var(--og);border:1px solid rgba(0,194,255,.2)}
+.avatar.ai{background:linear-gradient(135deg,var(--og),var(--og-mid));color:#000}
+.bubble{
+  max-width:680px;padding:12px 16px;border-radius:10px;
+  font-size:13.5px;line-height:1.7;
+}
+.msg.user .bubble{
+  background:rgba(0,194,255,.08);border:1px solid rgba(0,194,255,.15);
+  border-radius:10px 2px 10px 10px;
+}
+.msg.ai .bubble{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:2px 10px 10px 10px;
+}
+
+/* Markdown in bubbles */
+.bubble h2{font-size:14px;font-weight:700;margin:12px 0 6px;color:var(--og)}
+.bubble h3{font-size:13px;font-weight:600;margin:10px 0 4px}
+.bubble p{margin-bottom:8px}
+.bubble p:last-child{margin-bottom:0}
+.bubble code{
+  font-family:var(--mono);font-size:11px;
+  background:var(--dim);border:1px solid var(--border);
+  padding:1px 5px;border-radius:3px;color:var(--og);
+}
+.bubble pre{
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:6px;padding:12px;margin:8px 0;overflow-x:auto;
+}
+.bubble pre code{
+  background:none;border:none;padding:0;font-size:11px;
+  color:var(--text);line-height:1.6;
+}
+.bubble ul,.bubble ol{padding-left:18px;margin:6px 0}
+.bubble li{margin-bottom:3px}
+.bubble strong{color:var(--text);font-weight:600}
+.bubble a{color:var(--og);text-decoration:none}
+.bubble a:hover{text-decoration:underline}
+.bubble blockquote{
+  border-left:3px solid var(--og);padding-left:12px;
+  color:var(--muted);margin:8px 0;font-style:italic;
+}
+.bubble table{width:100%;border-collapse:collapse;margin:8px 0;font-size:12px}
+.bubble th{background:var(--dim);padding:6px 10px;text-align:left;border:1px solid var(--border);font-size:11px;color:var(--muted);font-family:var(--mono);letter-spacing:.3px}
+.bubble td{padding:6px 10px;border:1px solid var(--border)}
+
+/* Proof footer */
+.proof-footer{
+  display:flex;align-items:center;gap:6px;margin-top:6px;flex-wrap:wrap;
+  padding-left:36px;
+}
+.pf-chip{
+  font-family:var(--mono);font-size:9px;letter-spacing:.3px;
+  padding:2px 7px;border-radius:3px;display:inline-flex;align-items:center;gap:4px;
+}
+.pf-chip.verified{color:var(--green);background:var(--green-dim);border:1px solid rgba(16,185,129,.2)}
+.pf-chip.model{color:var(--muted);background:var(--dim);border:1px solid var(--border)}
+.pf-chip.hash{color:var(--og);background:var(--og-dim);border:1px solid rgba(0,194,255,.2);cursor:pointer;text-decoration:none}
+.pf-chip.hash:hover{opacity:.75}
+
+/* Typing */
+.typing{display:flex;gap:4px;padding:14px 16px}
+.tdot{width:6px;height:6px;border-radius:50%;background:var(--muted);animation:tb 1.2s infinite}
+.tdot:nth-child(2){animation-delay:.2s}
+.tdot:nth-child(3){animation-delay:.4s}
+@keyframes tb{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-5px);opacity:1}}
+
+/* ── Input ── */
+.input-wrap{
+  padding:14px 20px;border-top:1px solid var(--border);
+  background:var(--surface);flex-shrink:0;
+}
+.input-box{
+  display:flex;gap:8px;align-items:flex-end;
+  background:var(--card);border:1px solid var(--border2);
+  border-radius:10px;padding:10px 12px;
+  transition:border-color .15s;max-width:800px;margin:0 auto;
+}
+.input-box:focus-within{border-color:var(--og)}
+.msg-in{
+  flex:1;background:transparent;border:none;outline:none;
+  font-family:var(--sans);font-size:13px;color:var(--text);
+  resize:none;line-height:1.5;max-height:140px;scrollbar-width:none;
+}
+.msg-in::placeholder{color:var(--muted)}
+.msg-in::-webkit-scrollbar{display:none}
+.send{
+  width:32px;height:32px;border-radius:7px;
+  background:var(--og);border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:opacity .15s,transform .1s;flex-shrink:0;
+}
+.send:hover{opacity:.85}
+.send:active{transform:scale(.95)}
+.send:disabled{opacity:.3;cursor:not-allowed;transform:none}
+.send svg{width:14px;height:14px;fill:#000}
+.input-note{
+  text-align:center;margin-top:7px;
+  font-family:var(--mono);font-size:9px;color:var(--muted);
+  letter-spacing:.3px;max-width:800px;margin:7px auto 0;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.in-dot{width:4px;height:4px;border-radius:50%;background:var(--green);box-shadow:0 0 4px var(--green)}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+  <div class="header-left">
+    <div class="og-logo">OG</div>
+    <span class="header-title">Ask OG Docs</span>
+    <span class="header-badge">TEE VERIFIED</span>
+  </div>
+  <div class="header-right">
+    <div class="tee-status"><div class="tee-dot"></div>LIVE</div>
+    <a class="hlink" href="https://docs.opengradient.ai" target="_blank">DOCS ↗</a>
+    <a class="hlink" href="https://hub.opengradient.ai" target="_blank">HUB ↗</a>
+    <a class="hlink" href="https://explorer.opengradient.ai" target="_blank">EXPLORER ↗</a>
+  </div>
+</header>
+
+<div class="body-wrap">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sb-section">
+      <div class="sb-label">// Quick Topics</div>
+      <button class="topic-btn" onclick="ask('How do I get started with OpenGradient?')">
+        <span class="topic-icon">🚀</span>Getting Started
+      </button>
+      <button class="topic-btn" onclick="ask('How do I install and use the Python SDK?')">
+        <span class="topic-icon">🐍</span>Python SDK
+      </button>
+      <button class="topic-btn" onclick="ask('What is the difference between TEE, ZKML, and Vanilla inference modes?')">
+        <span class="topic-icon">🔐</span>Inference Modes
+      </button>
+      <button class="topic-btn" onclick="ask('How do I upload a model to the OpenGradient Model Hub?')">
+        <span class="topic-icon">📦</span>Model Hub
+      </button>
+      <button class="topic-btn" onclick="ask('How does x402 payment work for LLM inference?')">
+        <span class="topic-icon">💳</span>x402 Payments
+      </button>
+      <button class="topic-btn" onclick="ask('How do I run LLM inference on OpenGradient?')">
+        <span class="topic-icon">🤖</span>LLM Inference
+      </button>
+      <button class="topic-btn" onclick="ask('What DeFi and Web3 use cases can I build on OpenGradient?')">
+        <span class="topic-icon">🏦</span>Use Cases
+      </button>
+      <button class="topic-btn" onclick="ask('How do ML Workflows work on OpenGradient?')">
+        <span class="topic-icon">⚙️</span>Workflows
+      </button>
+    </div>
+    <div class="sb-links">
+      <div class="sb-label">// Official Links</div>
+      <a class="sb-link" href="https://docs.opengradient.ai" target="_blank"><div class="sb-link-dot"></div>Documentation</a>
+      <a class="sb-link" href="https://hub.opengradient.ai" target="_blank"><div class="sb-link-dot"></div>Model Hub</a>
+      <a class="sb-link" href="https://explorer.opengradient.ai" target="_blank"><div class="sb-link-dot"></div>Block Explorer</a>
+      <a class="sb-link" href="https://faucet.opengradient.ai" target="_blank"><div class="sb-link-dot"></div>Testnet Faucet</a>
+      <a class="sb-link" href="https://github.com/OpenGradient/OpenGradient-SDK" target="_blank"><div class="sb-link-dot"></div>SDK on GitHub</a>
+      <a class="sb-link" href="https://discord.gg/SC45QNNMsB" target="_blank"><div class="sb-link-dot"></div>Discord</a>
+    </div>
+  </div>
+
+  <!-- Chat -->
+  <div class="chat-wrap">
+    <div class="msgs" id="msgs">
+
+      <!-- Welcome -->
+      <div class="welcome" id="welcome">
+        <div class="welcome-logo">OG</div>
+        <div class="welcome-title">Ask OpenGradient Docs</div>
+        <div class="welcome-sub">
+          Ask anything about OpenGradient — SDK setup, inference modes, model uploads,
+          x402 payments, TEE verification, and more. Every answer is powered by
+          OpenGradient's own TEE-verified LLM with a cryptographic proof.
+        </div>
+        <div class="qs-grid">
+          <div class="q-card" onclick="ask(this.querySelector('.q-text').textContent)">
+            <div class="q-tag">Getting Started</div>
+            <div class="q-text">How do I run my first LLM inference on OpenGradient?</div>
+          </div>
+          <div class="q-card" onclick="ask(this.querySelector('.q-text').textContent)">
+            <div class="q-tag">SDK</div>
+            <div class="q-text">Show me a complete Python example using the OpenGradient SDK.</div>
+          </div>
+          <div class="q-card" onclick="ask(this.querySelector('.q-text').textContent)">
+            <div class="q-tag">Verification</div>
+            <div class="q-text">What is the difference between TEE, ZKML, and Vanilla modes?</div>
+          </div>
+          <div class="q-card" onclick="ask(this.querySelector('.q-text').textContent)">
+            <div class="q-tag">Model Hub</div>
+            <div class="q-text">How do I upload an ONNX model to the OpenGradient Hub?</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Input -->
+    <div class="input-wrap">
+      <div class="input-box">
+        <textarea class="msg-in" id="msgIn" rows="1"
+          placeholder="Ask anything about OpenGradient..."></textarea>
+        <button class="send" id="sendBtn" onclick="sendMsg()">
+          <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+        </button>
+      </div>
+      <div class="input-note">
+        <div class="in-dot"></div>
+        Answers verified via TEE · Settled on OpenGradient Network · Every response has on-chain proof
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+let history  = [];
+let loading  = false;
+
+// ── Auto-resize textarea ──────────────────────────────────────
+const inp = document.getElementById("msgIn");
+inp.addEventListener("input", () => {
+  inp.style.height = "auto";
+  inp.style.height = Math.min(inp.scrollHeight, 140) + "px";
+});
+inp.addEventListener("keydown", e => {
+  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMsg(); }
+});
+
+// ── Simple markdown renderer ──────────────────────────────────
+function renderMd(text) {
+  return text
+    // Code blocks
+    .replace(/```(\w*)\n?([\s\S]*?)```/g, (_,lang,code) =>
+      `<pre><code>${escHtml(code.trim())}</code></pre>`)
+    // Inline code
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    // Headers
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^## (.+)$/gm,  '<h2>$1</h2>')
+    .replace(/^# (.+)$/gm,   '<h2>$1</h2>')
+    // Bold
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    // Italic
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    // Links
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
+    // Unordered list
+    .replace(/^[\-\*] (.+)$/gm, '<li>$1</li>')
+    .replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>')
+    // Numbered list
+    .replace(/^\d+\. (.+)$/gm, '<li>$1</li>')
+    // Horizontal rule
+    .replace(/^---$/gm, '<hr style="border-color:var(--border);margin:10px 0">')
+    // Blockquote
+    .replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>')
+    // Line breaks → paragraphs
+    .split(/\n\n+/)
+    .map(p => p.trim())
+    .filter(p => p && !p.startsWith('<'))
+    .reduce((acc, p) => {
+      return acc.replace(p, `<p>${p}</p>`);
+    }, text
+      .replace(/```(\w*)\n?([\s\S]*?)```/g, (_,lang,code) => `<pre><code>${escHtml(code.trim())}</code></pre>`)
+      .replace(/`([^`]+)`/g, '<code>$1</code>')
+      .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+      .replace(/^## (.+)$/gm,  '<h2>$1</h2>')
+      .replace(/^# (.+)$/gm,   '<h2>$1</h2>')
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g, '<em>$1</em>')
+      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
+      .replace(/^[\-\*] (.+)$/gm, '<li>$1</li>')
+      .replace(/^\d+\. (.+)$/gm, '<li>$1</li>')
+      .replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>')
+      .replace(/\n/g, '<br>')
+    );
+}
+
+// Simpler but effective markdown renderer
+function md(text) {
+  let html = escHtml(text);
+  // unescape code blocks first
+  html = text
+    .replace(/```(\w*)\n?([\s\S]*?)```/g, (_, lang, code) =>
+      `<pre><code>${escHtml(code.trim())}</code></pre>`)
+    .replace(/`([^`]+)`/g, `<code>$1</code>`)
+    .replace(/^### (.+)$/gm, `<h3>$1</h3>`)
+    .replace(/^## (.+)$/gm,  `<h2>$1</h2>`)
+    .replace(/^# (.+)$/gm,   `<h2>$1</h2>`)
+    .replace(/\*\*(.+?)\*\*/g, `<strong>$1</strong>`)
+    .replace(/\*(.+?)\*/g, `<em>$1</em>`)
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, `<a href="$2" target="_blank">$1</a>`)
+    .replace(/^[\-\*] (.+)$/gm, `<li>$1</li>`)
+    .replace(/^\d+\. (.+)$/gm,  `<li>$1</li>`)
+    .replace(/^> (.+)$/gm, `<blockquote>$1</blockquote>`)
+    .replace(/^---$/gm, `<hr style="border-color:var(--border);margin:10px 0">`)
+    .split(/\n\n/)
+    .map(block => {
+      if (block.startsWith('<')) return block;
+      return `<p>${block.replace(/\n/g,'<br>')}</p>`;
+    })
+    .join('');
+  return html;
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function shortHash(h) {
+  if (!h) return null;
+  return h.slice(0,8)+"..."+h.slice(-6);
+}
+
+// ── Add message to UI ─────────────────────────────────────────
+function addMsg(role, content, meta=null) {
+  const container = document.getElementById("msgs");
+
+  // Hide welcome
+  const welcome = document.getElementById("welcome");
+  if (welcome) welcome.style.display = "none";
+
+  const group = document.createElement("div");
+  group.className = "msg-group";
+
+  const avatarText = role === "user" ? "you" : "OG";
+  const avatarClass= role === "user" ? "user" : "ai";
+
+  let proofHTML = "";
+  if (role === "ai" && meta) {
+    const modelShort = (meta.model || "").split("/").pop() || "claude";
+    proofHTML = `
+      <div class="proof-footer">
+        ${meta.verified ? `<span class="pf-chip verified">✓ TEE VERIFIED</span>` : ""}
+        <span class="pf-chip model">${modelShort}</span>
+        ${meta.txHash ? `
+        <a class="pf-chip hash"
+           href="https://explorer.opengradient.ai/tx/${meta.txHash}"
+           target="_blank">
+          🔗 ${shortHash(meta.txHash)}
+        </a>` : ""}
+        ${meta.tokens ? `<span class="pf-chip model">${meta.tokens.total_tokens} tokens</span>` : ""}
+      </div>`;
+  }
+
+  group.innerHTML = `
+    <div class="msg ${role}">
+      <div class="avatar ${avatarClass}">${avatarText}</div>
+      <div class="bubble">${role === "user" ? escHtml(content) : md(content)}</div>
+    </div>
+    ${proofHTML}
+  `;
+
+  container.appendChild(group);
+  container.scrollTop = container.scrollHeight;
+  return group;
+}
+
+// ── Typing indicator ──────────────────────────────────────────
+function showTyping() {
+  const container = document.getElementById("msgs");
+  const div = document.createElement("div");
+  div.id = "typing"; div.className = "msg ai";
+  div.innerHTML = `
+    <div class="avatar ai">OG</div>
+    <div class="bubble" style="padding:14px 16px">
+      <div class="typing">
+        <div class="tdot"></div><div class="tdot"></div><div class="tdot"></div>
+      </div>
+    </div>`;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+function hideTyping() {
+  const t = document.getElementById("typing");
+  if (t) t.remove();
+}
+
+// ── Send message ──────────────────────────────────────────────
+async function sendMsg() {
+  const text = inp.value.trim();
+  if (!text || loading) return;
+  await ask(text);
+}
+
+async function ask(text) {
+  if (!text || loading) return;
+
+  loading = true;
+  inp.value = ""; inp.style.height = "auto";
+  document.getElementById("sendBtn").disabled = true;
+
+  addMsg("user", text);
+  history.push({ role: "user", content: text });
+
+  showTyping();
+
+  try {
+    const res = await fetch("/api/ask", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: history }),
+    });
+
+    hideTyping();
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || `Error ${res.status}`);
+    }
+
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+
+    const answer = data.answer || "No response received.";
+    history.push({ role: "assistant", content: answer });
+
+    addMsg("ai", answer, {
+      txHash:   data.txHash,
+      model:    data.model,
+      tokens:   data.tokens,
+      verified: data.verified,
+    });
+
+  } catch(err) {
+    hideTyping();
+    addMsg("ai",
+      `⚠️ **Error:** ${err.message}\n\nMake sure \`OG_PRIVATE_KEY\` and \`OG_WALLET_ADDR\` are set in your Vercel environment variables, and your wallet has $OPG tokens from [faucet.opengradient.ai](https://faucet.opengradient.ai).`
+    );
+  } finally {
+    loading = false;
+    document.getElementById("sendBtn").disabled = false;
+    inp.focus();
+  }
+}
+</script>
+</body>
+</html>
