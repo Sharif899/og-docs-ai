@@ -1,0 +1,8 @@
+{
+  "name": "og-docs-ai",
+  "version": "1.0.0",
+  "description": "Ask OpenGradient Docs — AI assistant powered by OpenGradient's own TEE-verified LLM",
+  "dependencies": {
+    "ethers": "^6.9.0"
+  }
+}
